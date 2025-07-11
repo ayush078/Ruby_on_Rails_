@@ -1,0 +1,140 @@
+  [1m[35m (0.7ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Create (2.1ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'development', '2025-07-11 04:33:27.314571', '2025-07-11 04:33:27.314575') RETURNING "key"[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateUsers (20250711043217)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (1.1ms)[0m  [1m[35mCREATE TABLE "users" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "email" varchar, "password_digest" varchar, "address" text, "role" integer, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20250711043217') RETURNING "version"[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateStores (20250711043239)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.8ms)[0m  [1m[35mCREATE TABLE "stores" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "email" varchar, "address" text, "user_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_b526db2ffb"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_stores_on_user_id" ON "stores" ("user_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20250711043239') RETURNING "version"[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateRatings (20250711043244)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.8ms)[0m  [1m[35mCREATE TABLE "ratings" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "user_id" integer NOT NULL, "store_id" integer NOT NULL, "rating" integer, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_a7dfeb9f5f"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+, CONSTRAINT "fk_rails_62fbf447b1"
+FOREIGN KEY ("store_id")
+  REFERENCES "stores" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_ratings_on_user_id" ON "ratings" ("user_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_ratings_on_store_id" ON "ratings" ("store_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20250711043244') RETURNING "version"[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mRating Load (0.2ms)[0m  [1m[34mSELECT "ratings".* FROM "ratings"[0m
+  [1m[36mStore Load (0.1ms)[0m  [1m[34mSELECT "stores".* FROM "stores"[0m
+  [1m[36mUser Load (0.1ms)[0m  [1m[34mSELECT "users".* FROM "users"[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Exists? (1.3ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "admin@storerating.com"], ["LIMIT", 1]]
+  [1m[36mUser Create (0.2ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "password_digest", "address", "role", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["name", "System Administrator Account"], ["email", "admin@storerating.com"], ["password_digest", "[FILTERED]"], ["address", "123 Admin Street, Admin City, Admin State 12345"], ["role", 2], ["created_at", "2025-07-11 04:37:32.756972"], ["updated_at", "2025-07-11 04:37:32.756972"]]
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Exists? (1.1ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "john@techstore.com"], ["LIMIT", 1]]
+  [1m[36mUser Create (0.2ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "password_digest", "address", "role", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["name", "John Smith Store Owner Account"], ["email", "john@techstore.com"], ["password_digest", "[FILTERED]"], ["address", "456 Business Avenue, Commerce City, Business State 67890"], ["role", 1], ["created_at", "2025-07-11 04:37:33.015478"], ["updated_at", "2025-07-11 04:37:33.015478"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Exists? (1.1ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "sarah@bookstore.com"], ["LIMIT", 1]]
+  [1m[36mUser Create (0.2ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "password_digest", "address", "role", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["name", "Sarah Johnson Store Owner Account"], ["email", "sarah@bookstore.com"], ["password_digest", "[FILTERED]"], ["address", "789 Book Lane, Literature Town, Reading State 11111"], ["role", 1], ["created_at", "2025-07-11 04:37:33.273013"], ["updated_at", "2025-07-11 04:37:33.273013"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Exists? (1.1ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "michael@foodstore.com"], ["LIMIT", 1]]
+  [1m[36mUser Create (0.2ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "password_digest", "address", "role", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["name", "Michael Brown Store Owner Account"], ["email", "michael@foodstore.com"], ["password_digest", "[FILTERED]"], ["address", "321 Food Street, Culinary City, Taste State 22222"], ["role", 1], ["created_at", "2025-07-11 04:37:33.530769"], ["updated_at", "2025-07-11 04:37:33.530769"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mStore Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "stores" WHERE "stores"."email" = ? LIMIT ?[0m  [["email", "contact@techstore.com"], ["LIMIT", 1]]
+  [1m[36mStore Create (0.2ms)[0m  [1m[32mINSERT INTO "stores" ("name", "email", "address", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["name", "Tech Electronics Store Chain"], ["email", "contact@techstore.com"], ["address", "456 Business Avenue, Commerce City, Business State 67890"], ["user_id", 2], ["created_at", "2025-07-11 04:37:33.549423"], ["updated_at", "2025-07-11 04:37:33.549423"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mStore Exists? (0.8ms)[0m  [1m[34mSELECT 1 AS one FROM "stores" WHERE "stores"."email" = ? LIMIT ?[0m  [["email", "info@bookstore.com"], ["LIMIT", 1]]
+  [1m[36mStore Create (0.2ms)[0m  [1m[32mINSERT INTO "stores" ("name", "email", "address", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["name", "Classic Books and Literature Store"], ["email", "info@bookstore.com"], ["address", "789 Book Lane, Literature Town, Reading State 11111"], ["user_id", 3], ["created_at", "2025-07-11 04:37:33.553651"], ["updated_at", "2025-07-11 04:37:33.553651"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mStore Exists? (0.8ms)[0m  [1m[34mSELECT 1 AS one FROM "stores" WHERE "stores"."email" = ? LIMIT ?[0m  [["email", "hello@foodstore.com"], ["LIMIT", 1]]
+  [1m[36mStore Create (0.2ms)[0m  [1m[32mINSERT INTO "stores" ("name", "email", "address", "user_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["name", "Gourmet Food and Grocery Store"], ["email", "hello@foodstore.com"], ["address", "321 Food Street, Culinary City, Taste State 22222"], ["user_id", 4], ["created_at", "2025-07-11 04:37:33.557490"], ["updated_at", "2025-07-11 04:37:33.557490"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Exists? (1.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "user1@example.com"], ["LIMIT", 1]]
+  [1m[36mUser Create (0.2ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "password_digest", "address", "role", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["name", "Normal User Account Number 1"], ["email", "user1@example.com"], ["password_digest", "[FILTERED]"], ["address", "100 User Street, User City, User State 10000"], ["role", 0], ["created_at", "2025-07-11 04:37:33.817283"], ["updated_at", "2025-07-11 04:37:33.817283"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Exists? (1.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "user2@example.com"], ["LIMIT", 1]]
+  [1m[36mUser Create (0.2ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "password_digest", "address", "role", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["name", "Normal User Account Number 2"], ["email", "user2@example.com"], ["password_digest", "[FILTERED]"], ["address", "101 User Street, User City, User State 10001"], ["role", 0], ["created_at", "2025-07-11 04:37:34.077867"], ["updated_at", "2025-07-11 04:37:34.077867"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Exists? (1.1ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "user3@example.com"], ["LIMIT", 1]]
+  [1m[36mUser Create (0.2ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "password_digest", "address", "role", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["name", "Normal User Account Number 3"], ["email", "user3@example.com"], ["password_digest", "[FILTERED]"], ["address", "102 User Street, User City, User State 10002"], ["role", 0], ["created_at", "2025-07-11 04:37:34.341122"], ["updated_at", "2025-07-11 04:37:34.341122"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Exists? (1.2ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "user4@example.com"], ["LIMIT", 1]]
+  [1m[36mUser Create (0.2ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "password_digest", "address", "role", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["name", "Normal User Account Number 4"], ["email", "user4@example.com"], ["password_digest", "[FILTERED]"], ["address", "103 User Street, User City, User State 10003"], ["role", 0], ["created_at", "2025-07-11 04:37:34.598908"], ["updated_at", "2025-07-11 04:37:34.598908"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mUser Exists? (1.3ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "user5@example.com"], ["LIMIT", 1]]
+  [1m[36mUser Create (0.2ms)[0m  [1m[32mINSERT INTO "users" ("name", "email", "password_digest", "address", "role", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["name", "Normal User Account Number 5"], ["email", "user5@example.com"], ["password_digest", "[FILTERED]"], ["address", "104 User Street, User City, User State 10004"], ["role", 0], ["created_at", "2025-07-11 04:37:34.860108"], ["updated_at", "2025-07-11 04:37:34.860108"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mRating Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "ratings" WHERE "ratings"."user_id" = ? AND "ratings"."store_id" = ? LIMIT ?[0m  [["user_id", 5], ["store_id", 2], ["LIMIT", 1]]
+  [1m[36mRating Create (0.2ms)[0m  [1m[32mINSERT INTO "ratings" ("user_id", "store_id", "rating", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?) RETURNING "id"[0m  [["user_id", 5], ["store_id", 2], ["rating", 5], ["created_at", "2025-07-11 04:37:34.874671"], ["updated_at", "2025-07-11 04:37:34.874671"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mRating Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "ratings" WHERE "ratings"."user_id" = ? AND "ratings"."store_id" = ? LIMIT ?[0m  [["user_id", 5], ["store_id", 3], ["LIMIT", 1]]
+  [1m[36mRating Create (0.2ms)[0m  [1m[32mINSERT INTO "ratings" ("user_id", "store_id", "rating", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?) RETURNING "id"[0m  [["user_id", 5], ["store_id", 3], ["rating", 1], ["created_at", "2025-07-11 04:37:34.879109"], ["updated_at", "2025-07-11 04:37:34.879109"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mRating Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "ratings" WHERE "ratings"."user_id" = ? AND "ratings"."store_id" = ? LIMIT ?[0m  [["user_id", 5], ["store_id", 1], ["LIMIT", 1]]
+  [1m[36mRating Create (0.2ms)[0m  [1m[32mINSERT INTO "ratings" ("user_id", "store_id", "rating", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?) RETURNING "id"[0m  [["user_id", 5], ["store_id", 1], ["rating", 3], ["created_at", "2025-07-11 04:37:34.883600"], ["updated_at", "2025-07-11 04:37:34.883600"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mRating Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "ratings" WHERE "ratings"."user_id" = ? AND "ratings"."store_id" = ? LIMIT ?[0m  [["user_id", 6], ["store_id", 3], ["LIMIT", 1]]
+  [1m[36mRating Create (0.2ms)[0m  [1m[32mINSERT INTO "ratings" ("user_id", "store_id", "rating", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?) RETURNING "id"[0m  [["user_id", 6], ["store_id", 3], ["rating", 3], ["created_at", "2025-07-11 04:37:34.887696"], ["updated_at", "2025-07-11 04:37:34.887696"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mRating Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "ratings" WHERE "ratings"."user_id" = ? AND "ratings"."store_id" = ? LIMIT ?[0m  [["user_id", 6], ["store_id", 2], ["LIMIT", 1]]
+  [1m[36mRating Create (0.2ms)[0m  [1m[32mINSERT INTO "ratings" ("user_id", "store_id", "rating", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?) RETURNING "id"[0m  [["user_id", 6], ["store_id", 2], ["rating", 1], ["created_at", "2025-07-11 04:37:34.891700"], ["updated_at", "2025-07-11 04:37:34.891700"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mRating Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "ratings" WHERE "ratings"."user_id" = ? AND "ratings"."store_id" = ? LIMIT ?[0m  [["user_id", 6], ["store_id", 1], ["LIMIT", 1]]
+  [1m[36mRating Create (0.2ms)[0m  [1m[32mINSERT INTO "ratings" ("user_id", "store_id", "rating", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?) RETURNING "id"[0m  [["user_id", 6], ["store_id", 1], ["rating", 5], ["created_at", "2025-07-11 04:37:34.895691"], ["updated_at", "2025-07-11 04:37:34.895691"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mRating Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "ratings" WHERE "ratings"."user_id" = ? AND "ratings"."store_id" = ? LIMIT ?[0m  [["user_id", 7], ["store_id", 1], ["LIMIT", 1]]
+  [1m[36mRating Create (0.2ms)[0m  [1m[32mINSERT INTO "ratings" ("user_id", "store_id", "rating", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?) RETURNING "id"[0m  [["user_id", 7], ["store_id", 1], ["rating", 5], ["created_at", "2025-07-11 04:37:34.899685"], ["updated_at", "2025-07-11 04:37:34.899685"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mRating Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "ratings" WHERE "ratings"."user_id" = ? AND "ratings"."store_id" = ? LIMIT ?[0m  [["user_id", 7], ["store_id", 2], ["LIMIT", 1]]
+  [1m[36mRating Create (0.2ms)[0m  [1m[32mINSERT INTO "ratings" ("user_id", "store_id", "rating", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?) RETURNING "id"[0m  [["user_id", 7], ["store_id", 2], ["rating", 4], ["created_at", "2025-07-11 04:37:34.903644"], ["updated_at", "2025-07-11 04:37:34.903644"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mRating Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "ratings" WHERE "ratings"."user_id" = ? AND "ratings"."store_id" = ? LIMIT ?[0m  [["user_id", 8], ["store_id", 3], ["LIMIT", 1]]
+  [1m[36mRating Create (0.2ms)[0m  [1m[32mINSERT INTO "ratings" ("user_id", "store_id", "rating", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?) RETURNING "id"[0m  [["user_id", 8], ["store_id", 3], ["rating", 4], ["created_at", "2025-07-11 04:37:34.907650"], ["updated_at", "2025-07-11 04:37:34.907650"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mRating Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "ratings" WHERE "ratings"."user_id" = ? AND "ratings"."store_id" = ? LIMIT ?[0m  [["user_id", 8], ["store_id", 2], ["LIMIT", 1]]
+  [1m[36mRating Create (0.2ms)[0m  [1m[32mINSERT INTO "ratings" ("user_id", "store_id", "rating", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?) RETURNING "id"[0m  [["user_id", 8], ["store_id", 2], ["rating", 5], ["created_at", "2025-07-11 04:37:34.911566"], ["updated_at", "2025-07-11 04:37:34.911566"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mRating Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "ratings" WHERE "ratings"."user_id" = ? AND "ratings"."store_id" = ? LIMIT ?[0m  [["user_id", 9], ["store_id", 1], ["LIMIT", 1]]
+  [1m[36mRating Create (0.1ms)[0m  [1m[32mINSERT INTO "ratings" ("user_id", "store_id", "rating", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?) RETURNING "id"[0m  [["user_id", 9], ["store_id", 1], ["rating", 4], ["created_at", "2025-07-11 04:37:34.915407"], ["updated_at", "2025-07-11 04:37:34.915407"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mRating Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "ratings" WHERE "ratings"."user_id" = ? AND "ratings"."store_id" = ? LIMIT ?[0m  [["user_id", 9], ["store_id", 2], ["LIMIT", 1]]
+  [1m[36mRating Create (0.2ms)[0m  [1m[32mINSERT INTO "ratings" ("user_id", "store_id", "rating", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?) RETURNING "id"[0m  [["user_id", 9], ["store_id", 2], ["rating", 3], ["created_at", "2025-07-11 04:37:34.919263"], ["updated_at", "2025-07-11 04:37:34.919263"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mRating Count (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "ratings"[0m
+  [1m[36mUser Count (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "users"[0m
+  [1m[36mUser Count (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "users" WHERE "users"."role" = ?[0m  [["role", 2]]
+  [1m[36mUser Count (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "users" WHERE "users"."role" = ?[0m  [["role", 1]]
+  [1m[36mUser Count (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "users" WHERE "users"."role" = ?[0m  [["role", 0]]
+  [1m[36mStore Count (0.1ms)[0m  [1m[34mSELECT COUNT(*) FROM "stores"[0m
+  [1m[36mCACHE Rating Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "ratings"[0m

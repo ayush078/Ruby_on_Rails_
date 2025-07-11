@@ -83,14 +83,8 @@ A Ruby on Rails web application that enables users to submit ratings for stores 
 
 ### Test Accounts
 
-#### System Admin
-- Email: `admin@storerating.com`
-- Password: `Admin123!`
 
-#### Store Owners
-- Email: `john@techstore.com` | Password: `Owner123!`
-- Email: `sarah@bookstore.com` | Password: `Owner456!`
-- Email: `michael@foodstore.com` | Password: `Owner789!`
+
 
 #### Normal Users
 - Email: `user1@example.com` | Password: `User123!`
